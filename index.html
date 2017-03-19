@@ -18,23 +18,29 @@
 
   var $ = (el) => document.getElementById(el);
   var data = {
-    consonants: ['b','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x'],
+    consonants: ['b','d','f','g','h','j','z','l','m','n','p','q','r','s','t','v','w','x'],
     vowels: ['a','e','i','o','u'],
     
     subheads: [
       'aqueous suspension', 'hydrochloride', 'anhydrous',
-      
-      'eliminates quackgrass', 'with lemon scent',
-      
-      'removes tough stains', 'safe for most surfaces',
 
-      'substitute', 'granulated', 'grade A', 'grade AA', 'non-toxic',
+      'eliminates quackgrass', 'with lemon scent', 'makes porcelain sparkle',
+      'removes tough stains', 'safe for most surfaces', 'with dioxygen difluoride',
+      'now boron-free',
+
+      'substitute', 'granulated', 'non-toxic',
 
       'for domestic use', 'read MSDS before use',
 
       'in tomato sauce', 'in gravy', 'thickens soups and sauces',
       'with NutraSweet', 'artificially flavored', 'cool ranch flavour',
-      'extra spicy',
+      'extra spicy', 'in light syrup', 'in heavy syrup', 'taste the terpenes',
+      
+      () => `with ${(c()+c()).toUpperCase()}-${randInt(100)}`,
+      () => {
+        var char=sample(['AAAA','AAA','AA','A','B','C','D','E','F']);
+        return `grade ${char}`;
+      },
     ],
     
     systems: [
@@ -165,10 +171,27 @@
   }
   
   function sample(x, src) {
-    src = src || data;
-    array = src[x];
+    var array;
+    
+    if (x.constructor === Array) {
+      array = x
+    } else {
+      src = src || data;
+      array = src[x];
+    }
+    
     if (!array) console.log('sample', x, src);
-    return array[Math.floor(Math.random()*array.length)];
+    var result = array[randInt(array.length)];
+    
+    if (result.constructor === Function) return result();
+    else return result;
+  }
+  
+  function randInt(max) {
+    rand = Math.random();
+    x = rand*max;
+    console.log('randInt', max, rand, x, Math.floor(x))
+    return Math.floor(x);
   }
   
   function colorizeMe(evt) {
@@ -219,7 +242,6 @@
     style="
       margin: -7px 0 0px 0;
       padding-left: 3px;
-      text-transform: lowercase;
     "
     onclick="randomizeMe(event)"
   ></h2>

@@ -1,33 +1,40 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
-<body style="
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Bevan|Monoton|Oswald|Racing+Sans+One" rel="stylesheet">
+</head>
+<body id="body" style="
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-           	font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
+            font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
             color: navy;
             background-color: ivory;
 ">
 
 <script>
-  var editing = true;
+  var editing = window.location.hostname != 'excitingbooks.github.io';
 
   var $ = (el) => document.getElementById(el);
   var data = {
-    consonants: ['B','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X'],
-    vowels: ['A','E','I','O','U'],
+    consonants: ['b','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x'],
+    vowels: ['a','e','i','o','u'],
     
     subheads: [
-      'aqueous suspension', 'hydrochloride',
+      'aqueous suspension', 'hydrochloride', 'anhydrous',
       
       'eliminates quackgrass', 'with lemon scent',
+      
+      'removes tough stains', 'safe for most surfaces',
 
-      'substitute', 'granulated', 'grade A', 'grade AA',
+      'substitute', 'granulated', 'grade A', 'grade AA', 'non-toxic',
 
       'for domestic use', 'read MSDS before use',
 
       'in tomato sauce', 'in gravy', 'thickens soups and sauces',
-      'with NutraSweet', 'artificially flavored', 'cool ranch flavour'
+      'with NutraSweet', 'artificially flavored', 'cool ranch flavour',
+      'extra spicy',
     ],
     
     systems: [
@@ -44,14 +51,29 @@
     
     schemes: [
       {
-        'background': [
+        backgrounds: [
           'DarkMagenta', 'MediumVioletRed',
           'DarkGreen', 'ForestGreen', 'SeaGreen', 'LimeGreen', 'DarkTurquoise',
           'DeepSkyBlue',
           'Goldenrod', 'DarkGoldenrod'
-        ]
+        ],
+        
+        fonts: [
+          [['Archivo Black', {margin: '0 0 -0.1em 0.025em'}], 'TW Cen MT, Futura'],
+          [['Helvetica', {fontWeight: 'bold'}], 'Helvetica'],
+          [['Monoton', {
+            margin: '-0.25em 0 -0.25em 0.05em',
+            fontSize: '4em',
+            }], 'Oswald'],
+          ['Oswald', 'Helvetica'],
+          [['Racing Sans One', {
+            margin: '-0.25em 0 0 0.075em',
+            fontSize: '4.5em',
+            }], 'TW Cen MT, Futura'],
+          'TW Cen MT, Futura'
+        ],
       }
-    ]
+    ],
   }
   
   function init() {
@@ -68,7 +90,7 @@
     $('brand').innerHTML = c()+v()+c()+v()+c()+v()+c();
     $('subhead').innerHTML = subhead();
     $('size').innerHTML = size();
-    colorize();
+    stylize();
   }
   
   function seed(force) {
@@ -83,9 +105,46 @@
     }
   }
   
-  function colorize() {
+  function stylize() {
+    resetEls('brand', 'label');
+    
     var scheme = sample('schemes');
-    $('label').style.backgroundColor = sample('background', scheme);
+    styleEl('label', sample('backgrounds', scheme), 'backgroundColor');
+    
+    var font = sample('fonts', scheme);
+    
+    var font1, font2;
+    if (font.constructor === Array) {
+      font1 = font[0];
+      font2 = font[1];
+    } else {
+      font1 = font;
+      font2 = $('body').style.fontFamily;
+    }
+    
+    styleEl('brand', font1, 'fontFamily');
+    styleEl('label', font2, 'fontFamily');
+  }
+  
+  function resetEls(...elNames) {
+    elNames.forEach((elName) => {
+      var el = $(elName);
+      el.style.cssText = el.getAttribute('default-style');
+    });
+  }
+  
+  function styleEl(elName, val, attr) {
+    console.log('styleEl', elName, val, attr)
+    var el = $(elName);
+    var styles = {};
+    if (val.constructor === Array) {
+      styles = val[1];
+      val = val[0];
+    }
+    
+    styles[attr] = val;
+    
+    Object.keys(styles).forEach((style)=> el.style[style] = styles[style]);
   }
   
   function c() { return sample('consonants'); }
@@ -130,14 +189,17 @@
     window.removeEventListener("load", load, false);
     init();  
   }, false);
+  
+  window.addEventListener("hashchange", function load(event){
+    init();  
+  }, false);
 </script>
 
 <article id="label"
-  style="
+  default-style="
     width: 24em;
     height: 30em;
     color: floralwhite;
-    background-color: darkturquoise;
     border-radius: 1em;
     padding: 2.0em;
     position: relative;
@@ -146,12 +208,12 @@
   onclick="colorizeMe(event)"
 >
   <h1 id="brand" 
-    style="
+    default-style="
       margin: 0px;
       font-size: 60px;
     "
     onclick="randomizeMe(event)"
-  >WUBUROW</h1>
+  ></h1>
   
   <h2 id="subhead" 
     style="
@@ -160,7 +222,7 @@
       text-transform: lowercase;
     "
     onclick="randomizeMe(event)"
-  >in tomato sauce</h2>
+  ></h2>
   
   <h3 id="size"
     style="
@@ -173,7 +235,7 @@
       right: 0;
     "
     onclick="randomizeMe(event)"
-  >150 cl</h3>
+  ></h3>
 </article>
 
 <button style="

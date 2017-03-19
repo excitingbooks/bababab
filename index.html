@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Bevan|Monoton|Oswald|Racing+Sans+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Bevan|Monoton|Oswald|Racing+Sans+One|Berkshire+Swash|Slabo|Gidugu|Yellowtail|Yesteryear|Grand+Hotel" rel="stylesheet">
 </head>
 
 <script>
@@ -13,8 +13,7 @@
     vowels: ['a','e','i','o','u'],
     
     subheads: [
-      'aqueous suspension', 'hydrochloride', 'anhydrous',
-
+      'aqueous suspension', 'hydrochloride', 'anhydrous', 'hygroscopic',
       'granulated', 'non-toxic', 'professional use only', 'laboratory grade', 'buffered',
       'for domestic use', 'read MSDS before use',
 
@@ -53,13 +52,14 @@
           {a: ['ForestGreen'],     b: ['Gold', 'Ivory'],          c: ['Gold', 'Ivory'],          },
           {a: ['SeaGreen'],        b: ['Gold', 'Ivory'],          c: ['Gold', 'Ivory'],          },
           {a: ['LimeGreen'],       b: ['White', 'Gold'],          c: ['Goldenrod', 'Magenta'],          },
-          {a: ['DarkTurquoise'],   b: ['Magenta', 'White'],       c: ['Magenta', 'White'],       },
-          {a: ['DeepSkyBlue'],     b: ['Silver', 'Magenta'],      c: ['DeepSkyBlue', 'Magenta'], },
-          {a: ['Goldenrod'],       b: ['Turquoise', '#333'],     c: ['DeepSkyBlue', 'YellowGreen'],   },
+          {a: ['DarkTurquoise'],   b: ['DeepPink', 'White'],      c: ['Magenta', 'White'],       },
+          {a: ['DeepSkyBlue'],     b: ['#eae85b', 'Magenta'],     c: ['DeepSkyBlue', 'Magenta'], },
+          {a: ['Goldenrod'],       b: ['Turquoise', '#333'],      c: ['DeepSkyBlue', 'YellowGreen'],   },
           {a: ['DarkGoldenrod'],   b: ['Silver', 'White'],        c: ['Goldenrod', 'Navy'],   },
         ],
         
         fonts: [
+          [['Gidugu', {fontSize: '7em', margin: '-0.5em 0 -0.7em 0'}], 'Oswald']
           [['Archivo Black', {margin: '0 0 -0.1em 0.025em'}], 'TW Cen MT, Futura'],
           [['Helvetica', {fontWeight: 'bold'}], 'Helvetica'],
           [['Monoton', {
@@ -73,6 +73,26 @@
             }], 'TW Cen MT, Futura'],
           'TW Cen MT, Futura'
         ],
+      },
+      {
+        colors: [
+          {a: ['#ec389a'],         b: ['DeepSkyBlue', 'Ivory'],   c: ['DeepSkyBlue', 'Ivory'],   },
+          {a: ['MediumVioletRed'], b: ['DeepSkyBlue', 'Ivory'],   c: ['DeepSkyBlue', 'Ivory'],   },
+          {a: ['DarkTurquoise'],   b: ['#ec389a', 'White'],       c: ['Ivory', 'White'],       },
+          {a: ['DeepSkyBlue'],     b: ['#eae85b', 'Magenta'],     c: ['Ivory', 'LemonChiffon'], },
+          {a: ['DodgerBlue'],      b: ['#ec389a', '#d84646'],     c: ['LemonChiffon', '#ec389a'], },
+        ],
+        
+        fonts: [
+          [['Berkshire Swash', {textTransform: 'capitalize'}], 'Slabo'],
+          [['Yellowtail', { fontSize: '6rem', textAlign: 'center', 
+              textTransform: 'capitalize', marginBottom: '-1.5rem'}], 
+           ['Oswald', {textAlign: 'center'}]],
+          [['Yesteryear', {fontSize: '6rem', textTransform: 'capitalize',
+             marginBottom: '-1.5rem'}], 'Oswald'],
+          [['Grand Hotel', {fontSize: '6rem', textTransform: 'capitalize',
+             marginBottom: '-1.5rem'}], 'Oswald'],
+        ]
       }
     ],
   }
@@ -88,7 +108,7 @@
   }
 
   function randomize() {
-    $('brand').innerHTML = brand();
+    $('brand').innerHTML = document.title = brand();
     $('subhead').innerHTML = subhead();
     $('size').innerHTML = size();
     stylize();
@@ -173,6 +193,7 @@
   }
   
   function sample(x, src) {
+    console.log('sample', x, src);
     var array;
     
     if (x.constructor === Array) {
@@ -183,7 +204,10 @@
     }
     
     if (!array) console.log('sample', x, src);
-    var result = array[randInt(array.length)];
+    
+    console.log('array', array.length, array, 'index', index);
+    var index = randInt(array.length);
+    var result = array[index];
     
     if (result.constructor === Function) return result();
     else return result;

@@ -15,8 +15,7 @@
     subheads: [
       'aqueous suspension', 'hydrochloride', 'anhydrous',
 
-      'substitute', 'granulated', 'non-toxic',
-
+      'granulated', 'non-toxic', 'professional use only', 'laboratory grade', 'buffered',
       'for domestic use', 'read MSDS before use',
 
       'non-organic', 'eliminates quackgrass', 'with lemon scent', 'makes porcelain sparkle',
@@ -27,10 +26,10 @@
       'with NutraSweet', 'artificially flavored', 'cool ranch flavour',
       'extra spicy', 'in light syrup', 'in heavy syrup', 'taste the terpenes',
       'livens up any meal',
-      
+
       () => `with ${(c()+c()).toUpperCase()}-${randInt(100)}`,
-      () => 'grade ' + sample(['AAAA','AAA','AA','A','B','C','D','E','F']),
-      
+      () => `grade ${sample(['AAAA','AAA','AA','A','B','C','D','E','F'])}`,
+      () => `powdered ${brand()} substitute`,
     ],
     
     systems: [
@@ -47,11 +46,17 @@
     
     schemes: [
       {
-        backgrounds: [
-          'DarkMagenta', 'MediumVioletRed',
-          'DarkGreen', 'ForestGreen', 'SeaGreen', 'LimeGreen', 'DarkTurquoise',
-          'DeepSkyBlue',
-          'Goldenrod', 'DarkGoldenrod'
+        colors: [
+          {a: ['DarkMagenta'],     b: ['DeepSkyBlue', 'Ivory'],   c: ['DeepSkyBlue', 'Ivory'],   },
+          {a: ['MediumVioletRed'], b: ['DeepSkyBlue', 'Ivory'],   c: ['DeepSkyBlue', 'Ivory'],   },
+          {a: ['DarkGreen'],       b: ['Gold', 'Ivory'],          c: ['Gold', 'Ivory'],          },
+          {a: ['ForestGreen'],     b: ['Gold', 'Ivory'],          c: ['Gold', 'Ivory'],          },
+          {a: ['SeaGreen'],        b: ['Gold', 'Ivory'],          c: ['Gold', 'Ivory'],          },
+          {a: ['LimeGreen'],       b: ['White', 'Gold'],          c: ['Goldenrod', 'Magenta'],          },
+          {a: ['DarkTurquoise'],   b: ['Magenta', 'White'],       c: ['Magenta', 'White'],       },
+          {a: ['DeepSkyBlue'],     b: ['Silver', 'Magenta'],      c: ['DeepSkyBlue', 'Magenta'], },
+          {a: ['Goldenrod'],       b: ['Turquoise', '#333'],     c: ['DeepSkyBlue', 'YellowGreen'],   },
+          {a: ['DarkGoldenrod'],   b: ['Silver', 'White'],        c: ['Goldenrod', 'Navy'],   },
         ],
         
         fonts: [
@@ -59,7 +64,7 @@
           [['Helvetica', {fontWeight: 'bold'}], 'Helvetica'],
           [['Monoton', {
             margin: '-0.25em 0 -0.25em 0.05em',
-            fontSize: '4em',
+            fontSize: '3.5em',
             }], 'Oswald'],
           ['Oswald', 'Helvetica'],
           [['Racing Sans One', {
@@ -83,29 +88,32 @@
   }
 
   function randomize() {
-    $('brand').innerHTML = c()+v()+c()+v()+c()+v()+c();
+    $('brand').innerHTML = brand();
     $('subhead').innerHTML = subhead();
     $('size').innerHTML = size();
     stylize();
-  }
-  
-  function seed(force) {
-    var match = window.location.hash.match(/id=(.+)/);
-    
-    if (match && !force) {
-      Math.seedrandom(match[1]);
-    } else {
-      var seedSeed = Math.floor(Math.random()*1000000000).toString();
-      Math.seedrandom(seedSeed);
-      window.location.hash = `id=${seedSeed}`;
-    }
   }
   
   function stylize() {
     resetEls('brand', 'label');
     
     var scheme = sample('schemes');
-    styleEl('label', sample('backgrounds', scheme), 'backgroundColor');
+    var colorSet = sample('colors', scheme);
+    
+    console.log('colorSet', colorSet)
+    
+    var a = sample(colorSet.a);
+    var b = sample(colorSet.b);
+    var c = sample(colorSet.c);
+    
+    styleEl('label',   a, 'backgroundColor');
+    styleEl('brand',   b, 'color');
+    
+    if (sample([0,1])) {
+      b = c = 'transparent';
+    }
+    styleEl('stripe1', b, 'fill');
+    styleEl('stripe2', c, 'fill');
     
     var font = sample('fonts', scheme);
     
@@ -147,6 +155,10 @@
   
   function v() { return sample('vowels'); }
   
+  function brand() {
+    return c()+v()+c()+v()+c()+v()+c();
+  }
+  
   function subhead() {
     return sample('subheads');
   }
@@ -184,6 +196,18 @@
     return Math.floor(x);
   }
   
+  function seed(force) {
+    var match = window.location.hash.match(/id=(.+)/);
+    
+    if (match && !force) {
+      Math.seedrandom(match[1]);
+    } else {
+      var seedSeed = Math.floor(Math.random()*1000000000).toString();
+      Math.seedrandom(seedSeed);
+      window.location.hash = `id=${seedSeed}`;
+    }
+  }
+  
   function colorizeMe(evt) {
     if (!editing) return;
     var toBeColorized = evt.target;
@@ -216,7 +240,7 @@
             align-items: center;
             font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
             color: navy;
-            background-color: ivory;
+            background-color: #eee;
 ">
 
 <article id="label"
@@ -225,40 +249,53 @@
     height: 30em;
     color: floralwhite;
     border-radius: 1em;
-    padding: 2.0em;
     position: relative;
+    overflow: hidden;
   "
   
   onclick="colorizeMe(event)"
 >
-  <h1 id="brand" 
-    default-style="
-      margin: 0px;
-      font-size: 60px;
-    "
-    onclick="randomizeMe(event)"
-  ></h1>
-  
-  <h2 id="subhead" 
-    style="
-      margin: -7px 0 0px 0;
-      padding-left: 3px;
-    "
-    onclick="randomizeMe(event)"
-  ></h2>
-  
-  <h3 id="size"
-    style="
+  <svg id="background" style="
       position: absolute;
-      bottom: 2em;
-      font-size: 22px;
-      margin: 20px;
-      margin-bottom: -20px;
-      text-align: right;
-      right: 0;
-    "
-    onclick="randomizeMe(event)"
-  ></h3>
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+  ">
+    <g id="corner-stripes" transform="translate(400 280)">
+      <rect id="stripe1" x="25" y="0" width="50" height="300" transform="rotate(45)"></rect>
+      <rect id="stripe2" x="50" y="0" width="50" height="300" transform="rotate(45)"></rect>
+    </g>
+  </svg>
+  <main style="
+    padding: 2.0em;
+  ">
+    <h1 id="brand" 
+      default-style="
+        margin: 0px;
+        font-size: 60px;
+      "
+      onclick="randomizeMe(event)"
+    ></h1>
+  
+    <h2 id="subhead" 
+      style="
+        margin: -7px 0 0px 0;
+        padding-left: 3px;
+      "
+      onclick="randomizeMe(event)"
+    ></h2>
+  
+    <h3 id="size"
+      style="
+        position: absolute;
+        bottom: 0;
+        font-size: 22px;
+        text-align: right;
+      "
+      onclick="randomizeMe(event)"
+    ></h3>
+  </main>
 </article>
 
 <button style="

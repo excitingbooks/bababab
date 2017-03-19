@@ -3,15 +3,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Bevan|Monoton|Oswald|Racing+Sans+One" rel="stylesheet">
 </head>
-<body id="body" style="
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
-            color: navy;
-            background-color: ivory;
-">
 
 <script>
   var editing = window.location.hostname != 'excitingbooks.github.io';
@@ -24,23 +15,22 @@
     subheads: [
       'aqueous suspension', 'hydrochloride', 'anhydrous',
 
-      'eliminates quackgrass', 'with lemon scent', 'makes porcelain sparkle',
-      'removes tough stains', 'safe for most surfaces', 'with dioxygen difluoride',
-      'now boron-free',
-
       'substitute', 'granulated', 'non-toxic',
 
       'for domestic use', 'read MSDS before use',
 
-      'in tomato sauce', 'in gravy', 'thickens soups and sauces',
+      'non-organic', 'eliminates quackgrass', 'with lemon scent', 'makes porcelain sparkle',
+      'removes tough stains', 'safe for most surfaces', 'with dioxygen difluoride',
+      'now boron-free',
+
+      'organic', 'in tomato sauce', 'in gravy', 'thickens soups and sauces',
       'with NutraSweet', 'artificially flavored', 'cool ranch flavour',
       'extra spicy', 'in light syrup', 'in heavy syrup', 'taste the terpenes',
+      'livens up any meal',
       
       () => `with ${(c()+c()).toUpperCase()}-${randInt(100)}`,
-      () => {
-        var char=sample(['AAAA','AAA','AA','A','B','C','D','E','F']);
-        return `grade ${char}`;
-      },
+      () => 'grade ' + sample(['AAAA','AAA','AA','A','B','C','D','E','F']),
+      
     ],
     
     systems: [
@@ -217,6 +207,17 @@
     init();  
   }, false);
 </script>
+</head>
+
+<body id="body" style="
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
+            color: navy;
+            background-color: ivory;
+">
 
 <article id="label"
   default-style="

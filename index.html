@@ -1,0 +1,166 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<body style="
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+           	font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
+            color: navy;
+            background-color: ivory;
+">
+
+<script>
+  var editing = true;
+
+  var $ = (el) => document.getElementById(el);
+  var data = {
+    consonants: ['B','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X'],
+    vowels: ['A','E','I','O','U'],
+    
+    subheads: [
+      'Aqueous suspension', 'Hydrochloride',
+
+      'Substitute',
+
+      'For domestic use', 'Read MSDS before use',
+
+      'In tomato sauce', 'In gravy', 'Thickens soups and sauces',
+    ],
+    
+    systems: [
+      {
+        units: ['ml', 'l', 'g', 'kg'],
+        multipliers: [5, 10, 50, 100]
+      },
+
+      {
+        units: ['fl oz', 'drams', 'grains', 'oz', 'lb', 'st', 'cwt', 'ton', 'dr', 'oz', 'lb', 'st', 'qr'],
+        multipliers: [3, 4]
+      },
+    ],
+    
+    schemes: [
+      {
+        'background': ['DarkTurquoise', 'DarkMagenta', 'DarkGreen', ]
+      }
+    ]
+  }
+  
+  function spin() {
+    $('brand').innerHTML = c()+v()+c()+v()+c()+v()+c();
+    $('subhead').innerHTML = subhead();
+    $('size').innerHTML = size();
+    colorize();
+  }
+  
+  function colorize() {
+    var scheme = sample('schemes');
+    $('label').style.backgroundColor = sample('background', scheme);
+  }
+  
+  function c() { return sample('consonants'); }
+  
+  function v() { return sample('vowels'); }
+  
+  function subhead() {
+    return sample('subheads');
+  }
+  
+  function size() {
+    var system = sample('systems');
+    var unit = sample('units', system);
+    var multiplier = sample('multipliers', system);
+    var number = multiplier * Math.floor(Math.random()*9 + 1);
+    
+    return `${number} ${unit}`;
+  }
+  
+  function sample(x, src) {
+    src = src || data;
+    array = src[x];
+    if (!array) console.log('sample', x, src);
+    return array[Math.floor(Math.random()*array.length)];
+  }
+  
+  function colorizeMe(evt) {
+    if (!editing) return;
+    var toBeColorized = evt.target;
+    
+    $('colorizeMeInput').addEventListener('change', function(evt) {
+      toBeColorized.style.backgroundColor = evt.target.value;
+    });
+    $('colorizeMeInput').click();
+  }
+  
+  function randomizeMe(evt) {
+    evt.stopPropagation();
+  }
+  
+  window.addEventListener("load", function load(event){
+      window.removeEventListener("load", load, false);
+      spin();  
+  }, false);
+</script>
+
+<article id="label"
+  style="
+    width: 24em;
+    height: 30em;
+    color: floralwhite;
+    background-color: darkturquoise;
+    border-radius: 1em;
+    padding: 2.0em;
+    position: relative;
+  "
+  
+  onclick="colorizeMe(event)"
+>
+  <h1 id="brand" 
+    style="
+      margin: 0px;
+      font-size: 60px;
+    "
+    onclick="randomizeMe(event)"
+  >WUBUROW</h1>
+  
+  <h2 id="subhead" 
+    style="
+      margin: -7px 0 0px 0;
+      padding-left: 3px;
+      text-transform: lowercase;
+    "
+    onclick="randomizeMe(event)"
+  >in tomato sauce</h2>
+  
+  <h3 id="size"
+    style="
+      position: absolute;
+      bottom: 2em;
+      font-size: 22px;
+      margin: 0;
+      margin-bottom: -20px;
+    "
+    onclick="randomizeMe(event)"
+  >150 cl</h3>
+</article>
+
+<button style="
+  position: fixed;
+  bottom: 3em;
+  padding: 10px;
+  
+  color: ivory;
+  border: 2px solid navy;
+  background-color: navy;
+  
+  text-transform: uppercase;
+  font-family: &#39;Tw Cen MT&#39;, &#39;Futura&#39;, &#39;Helvetica&#39;;
+  font-size: 16px;
+" onclick="spin()">
+  Spin
+</button>
+
+<div style="display: none;">
+  <input type="color" id="colorizeMeInput">
+</div>
+</body></html>
